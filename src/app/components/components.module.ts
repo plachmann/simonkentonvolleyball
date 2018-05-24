@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { NouisliderModule } from 'ng2-nouislider';
-import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2';
 
 import { BasicelementsComponent } from './basicelements/basicelements.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -17,26 +16,25 @@ import { MainformComponent } from './mainform/mainform.component';
 import { PlayercardComponent } from './playercard/playercard.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        NgbModule,
-        NouisliderModule,
-        JWBootstrapSwitchModule
-    ],
-    declarations: [
-        ComponentsComponent,
-        BasicelementsComponent,
-        NavigationComponent,
-        TypographyComponent,
-        NucleoiconsComponent,
-        NotificationComponent,
-        NgbdModalComponent,
-        NgbdModalContent,
-        MainformComponent,
-        PlayercardComponent
-    ],
-    entryComponents: [NgbdModalContent],
-    exports:[ ComponentsComponent ]
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgbModule,
+    NouisliderModule
+  ],
+  declarations: [
+    ComponentsComponent,
+    BasicelementsComponent,
+    NavigationComponent,
+    TypographyComponent,
+    NucleoiconsComponent,
+    NotificationComponent,
+    NgbdModalComponent,
+    NgbdModalContent,
+    MainformComponent,
+    PlayercardComponent
+  ],
+  entryComponents: [NgbdModalContent],
+  exports: [ComponentsComponent]
 })
 export class ComponentsModule { }
