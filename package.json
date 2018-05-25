@@ -21,15 +21,18 @@
     "@angular/platform-browser-dynamic": "6.0.3",
     "@angular/router": "6.0.3",
     "@ng-bootstrap/ng-bootstrap": "2.0.0",
+    "angular-calendar": "^0.25.2",
+    "angularfire2": "^5.0.0-rc.10",
     "bootstrap": "4.0.0-beta",
     "core-js": "^2.4.1",
+    "firebase": "^5.0.4",
     "jquery": "3.2.1",
     "ng2-nouislider": "1.7.11",
     "nouislider": "11.1.0",
     "popper.js": "^1.12.3",
     "rxjs": "^6.2.0",
-    "zone.js": "^0.8.4",
-    "rxjs-compat": "^6.0.0-rc.0"
+    "rxjs-compat": "^6.0.0-rc.0",
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@angular/cli": "6.0.3",
