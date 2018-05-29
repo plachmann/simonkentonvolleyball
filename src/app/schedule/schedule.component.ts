@@ -16,10 +16,17 @@ import {
 import { Observable } from 'rxjs';
 import { colors } from '../calendar-utils/colors';
 
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+
 interface Film {
   id: number;
   title: string;
   release_date: string;
+}
+interface Game {
+  opponenet: string;
+  team: string;
+  gametime: Date;
 }
 
 @Component({
@@ -29,18 +36,22 @@ interface Film {
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
-  view: string = 'month';
+  gamesRef = this.afs.collection('games');
+  gamesObs: Observable<any>;
+
+  view = 'month';
 
   viewDate: Date = new Date();
 
   events$: Observable<Array<CalendarEvent<{ film: Film }>>>;
 
-  activeDayIsOpen: boolean = false;
+  activeDayIsOpen = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private afs: AngularFirestore) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.fetchEvents();
+    this.getGames();
   }
 
   fetchEvents(): void {
@@ -110,5 +121,10 @@ export class ScheduleComponent implements OnInit {
       `https://www.themoviedb.org/movie/${event.meta.film.id}`,
       '_blank'
     );
+  }
+
+  getGames() {
+    const gamesRef = this.afs.collection('games');
+    this.gamesObs = gamesRef.valueChanges();
   }
 }

@@ -34,3 +34,7 @@
     </mwl-calendar-day-view>
   </div>
 </div>
+
+<ul *ngFor="let movie of gamesObs | async" class="card">
+  <li>{{ movie.team }}</li>
+</ul>

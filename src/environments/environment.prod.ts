@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  config: {
+  firebaseConfig: {
     apiKey: 'AIzaSyArQOiuZKnjg5X0DLXMZdJgDtQYkVap_6I',
     authDomain: 'sk-volleyball.firebaseapp.com',
     databaseURL: 'https://sk-volleyball.firebaseio.com',

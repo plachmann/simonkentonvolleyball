@@ -20,6 +20,11 @@ import { DemoUtilsModule } from './calendar-utils/module';
 
 import { HttpModule } from '@angular/http';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+
+import { environment } from '../environments/environment';
+export const firebaseConfig = environment.firebaseConfig;
 
 @NgModule({
   declarations: [
@@ -36,6 +41,8 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
     NgbModule.forRoot(),
     FormsModule,
     RouterModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFirestoreModule,
     AppRoutingModule,
     HomeModule,
     CalendarModule.forRoot(),
