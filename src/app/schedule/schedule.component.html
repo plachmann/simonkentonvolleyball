@@ -1,0 +1,40 @@
+<div class="page-header" data-parallax="true" style="background-image: url('../assets/img/daniel-olahh.jpg');">
+  <div class="filter"></div>
+  <div class="container">
+    <div class="motto text-center">
+      <h1>Schedule Works</h1>
+      <h3>Start designing your landing page here.</h3>
+      <br />
+      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn btn-outline-neutral btn-round">
+        <i class="fa fa-play"></i>Watch video</a>
+      <button type="button" class="btn btn-outline-neutral btn-round">Download</button>
+    </div>
+  </div>
+</div>
+
+
+<mwl-demo-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate" (viewDateChange)="fetchEvents()" (viewChange)="fetchEvents()">
+</mwl-demo-utils-calendar-header>
+
+<ng-template #loading>
+  <div class="text-center">
+    <i class="fa fa-spin fa-spinner fa-5x"></i>
+    <br> Loading events...
+  </div>
+</ng-template>
+
+<div *ngIf="events$ | async; else loading; let events">
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day)" (eventClicked)="eventClicked($event.event)">
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" (eventClicked)="eventClicked($event.event)">
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" (eventClicked)="eventClicked($event.event)">
+    </mwl-calendar-day-view>
+  </div>
+</div>
+
+<ul *ngFor="let movie of gamesObs | async" class="card">
+  <li>{{ movie.team }}</li>
+</ul>
