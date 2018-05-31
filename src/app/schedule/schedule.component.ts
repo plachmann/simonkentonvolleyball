@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { CalendarEvent } from 'angular-calendar';
+import { map, tap, toArray, mergeMap, switchMap, filter, flatMap, mergeAll, concatAll } from 'rxjs/operators';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import {
   isSameMonth,
   isSameDay,
@@ -11,12 +11,15 @@ import {
   endOfWeek,
   startOfDay,
   endOfDay,
-  format
+  format,
+  subDays,
+  addDays,
+  addHours
 } from 'date-fns';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { colors } from '../calendar-utils/colors';
 
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
 
 interface Film {
   id: number;
@@ -24,7 +27,7 @@ interface Film {
   release_date: string;
 }
 interface Game {
-  opponenet: string;
+  opponent: string;
   team: string;
   gametime: Date;
 }
@@ -43,15 +46,23 @@ export class ScheduleComponent implements OnInit {
 
   viewDate: Date = new Date();
 
-  events$: Observable<Array<CalendarEvent<{ film: Film }>>>;
+  events$: Observable<Array<CalendarEvent<{ game: Game }>>>;
+
+  eventsForGames$: Observable<Array<CalendarEvent<{ game: Game }>>>;
 
   activeDayIsOpen = false;
+
+  // new Date(year, monthIndex [, day [, hours [, minutes [, seconds [, milliseconds]]]]]);
+
+  events: CalendarEvent[] = [
+    /*empty array is filled with firestore data */
+  ];
+
 
   constructor(private http: HttpClient, private afs: AngularFirestore) { }
 
   ngOnInit() {
     this.fetchEvents();
-    this.getGames();
   }
 
   fetchEvents(): void {
@@ -78,22 +89,31 @@ export class ScheduleComponent implements OnInit {
       )
       .set('api_key', '0ec33936a68018857d727958dca1424f');
 
-    this.events$ = this.http
-      .get('https://api.themoviedb.org/3/discover/movie', { params })
+    this.events$ = of(this.events);
+
+    this.gamesRef = this.afs.collection('games');
+    this.gamesObs = this.gamesRef.valueChanges();
+
+
+    const collection: AngularFirestoreCollection<Game> = this.afs.collection('games')
+    const eventsForPhil = collection.valueChanges()
       .pipe(
-        map(({ results }: { results: Film[] }) => {
-          return results.map((film: Film) => {
-            return {
-              title: film.title,
-              start: new Date(film.release_date),
-              color: colors.yellow,
-              meta: {
-                film
-              }
-            };
-          });
+        tap(res => { console.log('clearing events'); this.events = []; }),
+        mergeAll(),
+        tap(console.log),
+        map(response => {
+          this.addEventToArray(response);
         })
       );
+
+    eventsForPhil.subscribe();
+  }
+
+  private addEventToArray(newEvent: any) {
+    console.log('adding event');
+    const t = new Date(newEvent.gametime.seconds * 1000);
+    this.events.push({ title: newEvent.opponent, start: t, color: colors.blue, meta: { newEvent } });
+    console.log(this.events);
   }
 
   dayClicked({
@@ -123,8 +143,36 @@ export class ScheduleComponent implements OnInit {
     );
   }
 
-  getGames() {
-    const gamesRef = this.afs.collection('games');
-    this.gamesObs = gamesRef.valueChanges();
+
+  playTime() {
+    console.log('playtime start');
+    const obs$ = of([{ opponent: 'Walton', team: 'varsity', gametime: new Date() },
+    { opponent: 'Scott', team: 'varsity', gametime: new Date() },
+    { opponent: 'Dixie', team: 'varsity', gametime: new Date() },
+    { opponent: 'Highlands', team: 'freshmen', gametime: new Date() }])
+      .pipe(
+        tap(console.log),
+        mergeAll(),
+        tap(console.log)
+      );
+
+    obs$.subscribe(a => {
+      console.log("playtime subscribe");
+      console.log(a);
+      console.log("playtime subscribe done");
+    }
+    );
+
+    const obs2$ = of({ opponent: 'Walton', team: 'varsity', gametime: new Date() },
+      { opponent: 'Scott', team: 'varsity', gametime: new Date() },
+      { opponent: 'Dixie', team: 'varsity', gametime: new Date() },
+      { opponent: 'Highlands', team: 'freshmen', gametime: new Date() })
+      .pipe(
+        tap(console.log)
+      );
+
+    obs2$.subscribe(a =>
+      console.log(a)
+    );
   }
 }

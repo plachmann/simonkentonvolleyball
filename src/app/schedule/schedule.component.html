@@ -36,5 +36,7 @@
 </div>
 
 <ul *ngFor="let movie of gamesObs | async" class="card">
-  <li>{{ movie.team }}</li>
+  <li>{{movie.team}}</li>
+  <li>{{movie.opponent}}</li>
+  <li>{{movie.gametime}}</li>
 </ul>
