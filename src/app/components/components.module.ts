@@ -14,6 +14,7 @@ import { NgbdModalComponent } from './modal/modal.component';
 import { NgbdModalContent } from './modal/modal.component';
 import { MainformComponent } from './mainform/mainform.component';
 import { PlayercardComponent } from './playercard/playercard.component';
+import { CoachcardComponent } from './coachcard/coachcard.component';
 
 @NgModule({
   imports: [
@@ -32,12 +33,14 @@ import { PlayercardComponent } from './playercard/playercard.component';
     NgbdModalComponent,
     NgbdModalContent,
     MainformComponent,
-    PlayercardComponent
+    PlayercardComponent,
+    CoachcardComponent
   ],
   entryComponents: [NgbdModalContent],
   exports: [
     ComponentsComponent,
-    PlayercardComponent
+    PlayercardComponent,
+    CoachcardComponent
   ]
 })
 export class ComponentsModule { }
