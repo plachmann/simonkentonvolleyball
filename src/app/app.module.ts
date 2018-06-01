@@ -22,6 +22,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { ComponentsModule } from './components/components.module';
 
 import { environment } from '../environments/environment';
 import { RulesComponent } from './rules/rules.component';
@@ -54,7 +55,8 @@ export const firebaseConfig = environment.firebaseConfig;
     CalendarModule.forRoot(),
     DemoUtilsModule,
     HttpClientModule,
-    HttpModule
+    HttpModule,
+    ComponentsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

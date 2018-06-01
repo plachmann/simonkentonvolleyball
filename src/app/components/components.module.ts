@@ -35,6 +35,9 @@ import { PlayercardComponent } from './playercard/playercard.component';
     PlayercardComponent
   ],
   entryComponents: [NgbdModalContent],
-  exports: [ComponentsComponent]
+  exports: [
+    ComponentsComponent,
+    PlayercardComponent
+  ]
 })
 export class ComponentsModule { }

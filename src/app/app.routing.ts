@@ -13,6 +13,7 @@ import { ScheduleComponent } from './schedule/schedule.component';
 import { PlayersComponent } from './players/players.component';
 import { CoachesComponent } from './coaches/coaches.component';
 import { RulesComponent } from './rules/rules.component';
+import { PlayercardComponent } from './components/playercard/playercard.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'players', component: PlayersComponent },
   { path: 'coaches', component: CoachesComponent },
   { path: 'rules', component: RulesComponent },
+  { path: 'card', component: PlayercardComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
