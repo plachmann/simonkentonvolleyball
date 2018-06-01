@@ -24,6 +24,9 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 import { environment } from '../environments/environment';
+import { RulesComponent } from './rules/rules.component';
+import { PlayersComponent } from './players/players.component';
+import { CoachesComponent } from './coaches/coaches.component';
 export const firebaseConfig = environment.firebaseConfig;
 
 @NgModule({
@@ -34,7 +37,10 @@ export const firebaseConfig = environment.firebaseConfig;
     ProfileComponent,
     NavbarComponent,
     FooterComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    RulesComponent,
+    PlayersComponent,
+    CoachesComponent
   ],
   imports: [
     BrowserModule,
