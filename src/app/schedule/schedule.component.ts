@@ -20,6 +20,7 @@ import { Observable, of } from 'rxjs';
 import { colors } from '../calendar-utils/colors';
 
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Router } from '@angular/router';
 
 interface Film {
   id: number;
@@ -30,6 +31,7 @@ interface Game {
   opponent: string;
   team: string;
   gametime: Date;
+  home: boolean;
 }
 
 @Component({
@@ -59,7 +61,7 @@ export class ScheduleComponent implements OnInit {
   ];
 
 
-  constructor(private http: HttpClient, private afs: AngularFirestore) { }
+  constructor(private http: HttpClient, private afs: AngularFirestore, private router: Router) { }
 
   ngOnInit() {
     this.fetchEvents();
@@ -143,36 +145,12 @@ export class ScheduleComponent implements OnInit {
     );
   }
 
-
-  playTime() {
-    console.log('playtime start');
-    const obs$ = of([{ opponent: 'Walton', team: 'varsity', gametime: new Date() },
-    { opponent: 'Scott', team: 'varsity', gametime: new Date() },
-    { opponent: 'Dixie', team: 'varsity', gametime: new Date() },
-    { opponent: 'Highlands', team: 'freshmen', gametime: new Date() }])
-      .pipe(
-        tap(console.log),
-        mergeAll(),
-        tap(console.log)
-      );
-
-    obs$.subscribe(a => {
-      console.log("playtime subscribe");
-      console.log(a);
-      console.log("playtime subscribe done");
-    }
-    );
-
-    const obs2$ = of({ opponent: 'Walton', team: 'varsity', gametime: new Date() },
-      { opponent: 'Scott', team: 'varsity', gametime: new Date() },
-      { opponent: 'Dixie', team: 'varsity', gametime: new Date() },
-      { opponent: 'Highlands', team: 'freshmen', gametime: new Date() })
-      .pipe(
-        tap(console.log)
-      );
-
-    obs2$.subscribe(a =>
-      console.log(a)
-    );
+  handleEvent(action: string, event: CalendarEvent): void {
+    action = (action === 'Clicked') ? 'edit' : action;
+    // this.modalData = {event, action};
+    const url = this.router.createUrlTree(['/', { outlets: { popup: event.meta.entity + '/' + event.meta.id + '/' + action } }]);
+    this.router.navigateByUrl(url.toString());
   }
+
+
 }

@@ -1,3 +1,26 @@
+<ng-template #customCellTemplate let-day="day" let-openDay="openDay" let-locale="locale" let-tooltipPlacement="tooltipPlacement"
+  let-highlightDay="highlightDay" let-unhighlightDay="unhighlightDay" let-eventClicked="eventClicked" let-tooltipTemplate="tooltipTemplate"
+  let-tooltipAppendToBody="tooltipAppendToBody">
+  <div class="cal-cell-top">
+    <span class="cal-day-badge bg-{{true ? 'success' : 'warning'}}" *ngIf="true">
+      {{ day }} 123
+    </span>
+    <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+    <div class="cal-day-notes" *ngIf="true" [ngbPopover]="day">
+      {{day}} 456
+    </div>
+  </div>
+  <div class="cal-events" *ngIf="true">
+    <div class="cal-event" *ngFor="let event of day.events" [style.backgroundColor]="event.color.primary" [ngClass]="event?.cssClass"
+      (mouseenter)="highlightDay.emit({event: event})" (mouseleave)="unhighlightDay.emit({event: event})" [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event"
+      [tooltipPlacement]="tooltipPlacement" [tooltipEvent]="event" [tooltipTemplate]="tooltipTemplate" [tooltipAppendToBody]="tooltipAppendToBody">
+    </div>
+  </div>
+</ng-template>
+
+
+
+
 <div class="section section-dark text-center">
   <div class="container">
     <h2 class="title">2018 Lady Pioneers Schedule</h2>
@@ -16,8 +39,9 @@
 
         <div *ngIf="events$ | async; else loading; let events">
           <div [ngSwitch]="view">
+            <!-- [cellTemplate]="customCellTemplate" -->
             <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [activeDayIsOpen]="activeDayIsOpen"
-              (dayClicked)="dayClicked($event.day)" (eventClicked)="eventClicked($event.event)">
+              (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)" [cellTemplate]="customCellTemplate">
             </mwl-calendar-month-view>
             <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" (eventClicked)="eventClicked($event.event)">
             </mwl-calendar-week-view>
