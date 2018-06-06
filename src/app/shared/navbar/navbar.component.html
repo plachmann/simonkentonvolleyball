@@ -11,26 +11,42 @@
     </div>
     <div class="collapse navbar-collapse" id="navbarToggler">
       <ul class="navbar-nav ml-auto">
+
         <li class="nav-item" *ngIf="!isDocumentation()">
-          <a class="nav-link" rel="tooltip" title="Schedule" data-placement="bottom" href="https://www.facebook.com/CreativeTim" target="_blank">
-            <i class="fa fa-calendar"></i>
-            Schedule
-            <p class="d-lg-none">Schedule</p>
+          <a class="nav-link" rel="tooltip" title="Home" data-placement="bottom" href="/home">
+            <i class="fa fa-home"></i>
+            Home
           </a>
         </li>
 
         <li class="nav-item" *ngIf="!isDocumentation()">
-          <a class="nav-link" rel="tooltip" title="Players" data-placement="bottom" href="https://www.github.com/CreativeTimOfficial/pk2-angular"
-            target="_blank">
-            <i class="fa fa-backward"></i>
-            Players
-            <p class="d-lg-none">Players</p>
+          <a class="nav-link" rel="tooltip" title="Schedule" data-placement="bottom" href="/schedule">
+            <i class="fa fa-calendar"></i>
+            Schedule
           </a>
         </li>
+
         <li class="nav-item" *ngIf="!isDocumentation()">
-          <a href="http://pk2-angular.creative-tim.com/documentation/tutorial" class="nav-link" target="_blank">
-            <i class="nc-icon nc-album-2"></i> Rules</a>
+          <a class="nav-link" rel="tooltip" title="Players" data-placement="bottom" href="/players">
+            <i class="fas fa-volleyball-ball"></i>
+            Players
+          </a>
         </li>
+
+        <li class="nav-item" *ngIf="!isDocumentation()">
+          <a class="nav-link" rel="tooltip" title="Coaches" data-placement="bottom" href="/coaches">
+            <i class="far fa-handshake"></i>
+            Coaches
+          </a>
+        </li>
+
+        <li class="nav-item" *ngIf="!isDocumentation()">
+          <a class="nav-link" rel="tooltip" title="Coaches" data-placement="bottom" href="/rules">
+            <i class="fa fa-address-book"></i>
+            Rules
+          </a>
+        </li>
+
       </ul>
     </div>
   </div>
