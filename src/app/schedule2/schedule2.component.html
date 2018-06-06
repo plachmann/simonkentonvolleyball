@@ -1,0 +1,19 @@
+<div class="section section-dark text-center">
+  <div class="container">
+    <h2 class="title">2018 Lady Pioneers Schedule</h2>
+    <div class="row" *ngFor="let book of gamesObservable | async">
+      <div class="col-md-3">
+        {{book.home ? "Home" : "Away"}}
+      </div>
+      <div class="col-md-3">
+        {{ book.team }}
+      </div>
+      <div class="col-md-3">
+        {{ book.opponent }}
+      </div>
+      <div class="col-md-3">
+        {{toDateString(book.gametime)}} {{toTimeString(book.gametime)}}
+      </div>
+    </div>
+  </div>
+</div>

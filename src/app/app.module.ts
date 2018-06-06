@@ -28,6 +28,7 @@ import { environment } from '../environments/environment';
 import { RulesComponent } from './rules/rules.component';
 import { PlayersComponent } from './players/players.component';
 import { CoachesComponent } from './coaches/coaches.component';
+import { Schedule2Component } from './schedule2/schedule2.component';
 export const firebaseConfig = environment.firebaseConfig;
 
 @NgModule({
@@ -41,7 +42,8 @@ export const firebaseConfig = environment.firebaseConfig;
     ScheduleComponent,
     RulesComponent,
     PlayersComponent,
-    CoachesComponent
+    CoachesComponent,
+    Schedule2Component
   ],
   imports: [
     BrowserModule,

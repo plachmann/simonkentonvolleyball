@@ -14,6 +14,7 @@ import { PlayersComponent } from './players/players.component';
 import { CoachesComponent } from './coaches/coaches.component';
 import { RulesComponent } from './rules/rules.component';
 import { PlayercardComponent } from './components/playercard/playercard.component';
+import { Schedule2Component } from './schedule2/schedule2.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -22,7 +23,7 @@ const routes: Routes = [
   { path: 'landing', component: LandingComponent },
   { path: 'nucleoicons', component: NucleoiconsComponent },
   { path: 'main', component: MainformComponent },
-  { path: 'schedule', component: ScheduleComponent },
+  { path: 'schedule', component: Schedule2Component },
   { path: 'players', component: PlayersComponent },
   { path: 'coaches', component: CoachesComponent },
   { path: 'rules', component: RulesComponent },
