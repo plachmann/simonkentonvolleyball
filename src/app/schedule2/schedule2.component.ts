@@ -8,7 +8,8 @@ interface Game {
   team: string;
   gametime: Date;
   home: boolean;
-  results: string
+  results: string;
+  event: string;
 }
 
 @Component({
