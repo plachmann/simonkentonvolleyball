@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { CalendarEvent } from 'angular-calendar';
+import { map, tap, toArray, mergeMap, switchMap, filter, flatMap, mergeAll, concatAll } from 'rxjs/operators';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import {
   isSameMonth,
   isSameDay,
@@ -11,12 +11,16 @@ import {
   endOfWeek,
   startOfDay,
   endOfDay,
-  format
+  format,
+  subDays,
+  addDays,
+  addHours
 } from 'date-fns';
-import { Observable } from 'rxjs';
+import { Observable, of, Subject, Subscription } from 'rxjs';
 import { colors } from '../calendar-utils/colors';
 
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Router } from '@angular/router';
 
 interface Film {
   id: number;
@@ -24,9 +28,10 @@ interface Film {
   release_date: string;
 }
 interface Game {
-  opponenet: string;
+  opponent: string;
   team: string;
   gametime: Date;
+  home: boolean;
 }
 
 @Component({
@@ -40,21 +45,48 @@ export class ScheduleComponent implements OnInit {
   gamesObs: Observable<any>;
 
   view = 'month';
-
   viewDate: Date = new Date();
+  modalData: {
+    action: string;
+    event: CalendarEvent;
+  };
+  eventSubscriber: Subscription;
+  actions: CalendarEventAction[] = [
+    {
+      label: '<i class="fa fa-fw fa-pencil"></i>',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.handleEvent('edit', event);
+      }
+    },
+    {
+      label: '<i class="fa fa-fw fa-times"></i>',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.handleEvent('delete', event);
+      }
+    }
+  ];
 
-  events$: Observable<Array<CalendarEvent<{ film: Film }>>>;
+  refresh: Subject<any> = new Subject();
 
-  activeDayIsOpen = false;
+  events: CalendarEvent<{ film: Game }>[] = [];
+  eventsobj = {
+    results: this.events
+  };
 
-  constructor(private http: HttpClient, private afs: AngularFirestore) { }
+  activeDayIsOpen = true;
+  events$: Observable<Array<CalendarEvent<{ film: Game }>>>;
+
+
+  constructor(private http: HttpClient, private afs: AngularFirestore, private router: Router) { }
 
   ngOnInit() {
-    this.fetchEvents();
-    this.getGames();
+    // this.fetchEvents();
+    console.log('begin populat cal');
+    this.populateCalendar();
+    console.log('end populat cal');
   }
 
-  fetchEvents(): void {
+  /* fetchEvents(): void {
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
@@ -78,23 +110,32 @@ export class ScheduleComponent implements OnInit {
       )
       .set('api_key', '0ec33936a68018857d727958dca1424f');
 
-    this.events$ = this.http
-      .get('https://api.themoviedb.org/3/discover/movie', { params })
+    this.events$ = of(this.events);
+
+    this.gamesRef = this.afs.collection('games');
+    this.gamesObs = this.gamesRef.valueChanges();
+
+
+    const collection: AngularFirestoreCollection<Game> = this.afs.collection('games')
+    const eventsForPhil = collection.valueChanges()
       .pipe(
-        map(({ results }: { results: Film[] }) => {
-          return results.map((film: Film) => {
-            return {
-              title: film.title,
-              start: new Date(film.release_date),
-              color: colors.yellow,
-              meta: {
-                film
-              }
-            };
-          });
+        tap(res => { console.log('clearing events'); this.events = []; }),
+        mergeAll(),
+        tap(console.log),
+        map(response => {
+          this.addEventToArray(response);
         })
       );
-  }
+
+    eventsForPhil.subscribe();
+  } */
+
+  /* private addEventToArray(newEvent: any) {
+    console.log('adding event');
+    const t = new Date(newEvent.gametime.seconds * 1000);
+    this.events.push({ title: newEvent.opponent, start: t, color: colors.blue, meta: { newEvent } });
+    console.log(this.events);
+  } */
 
   dayClicked({
     date,
@@ -123,8 +164,52 @@ export class ScheduleComponent implements OnInit {
     );
   }
 
-  getGames() {
-    const gamesRef = this.afs.collection('games');
-    this.gamesObs = gamesRef.valueChanges();
+  /* from http://www.jhipster-book.com/#!/news/entry/adding-history-to-21-points-health-with-angular-calendar */
+  populateCalendar() {
+    const monthEnd = endOfMonth(this.viewDate);
+    const month = format(monthEnd, 'YYYY-MM');
+
+    let booksCollection: AngularFirestoreCollection<Game>;
+    let booksObservable: Observable<Game[]>;
+
+    booksCollection = this.afs.collection('games');
+    booksObservable = booksCollection.valueChanges();
+
+    booksObservable.subscribe((response) => {
+      response.forEach((item) => {
+        this.events.push({
+          start: new Date(),
+          end: new Date(),
+          title: item.team + ': ' + item.opponent,
+          color: item.home ? colors.blue : colors.green,
+          draggable: false,
+          actions: this.actions,
+          meta: {
+            film: item
+          }
+        });
+
+      });
+      //this.refresh.next();
+
+      console.log(this.events);
+
+      this.events$ = of(this.events)
+        .pipe(
+          tap(console.log)
+        );
+
+      console.log(this.events$);
+
+    });
   }
+
+  handleEvent(action: string, event: CalendarEvent): void {
+    action = (action === 'Clicked') ? 'edit' : action;
+    // this.modalData = {event, action};
+    const url = this.router.createUrlTree(['/', { outlets: { popup: event.meta.entity + '/' + event.meta.id + '/' + action } }]);
+    this.router.navigateByUrl(url.toString());
+  }
+
+
 }
