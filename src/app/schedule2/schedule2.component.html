@@ -1,0 +1,39 @@
+<div class="section section-dark text-center">
+  <div class="container">
+    <h2 class="title">2018 Lady Pioneers Volleyball Schedule</h2>
+    <div class="row schedhead">
+      <div class="col-md-2">DATE</div>
+      <div class="col-md-2">TIME</div>
+      <div class="col-md-2">LOCATION</div>
+      <div class="col-md-2">TEAM</div>
+      <div class="col-md-2">OPPONENT</div>
+      <div class="col-md-2">RESULTS</div>
+    </div>
+    <br>
+    <div class="row" *ngFor="let game of gamesObservable | async">
+      <div class="col-md-2">
+        {{toDateString(game.gametime)}}
+      </div>
+      <div class="col-md-2">
+        {{toTimeString(game.gametime)}}
+      </div>
+      <div class="col-md-2" *ngIf="game.home != null">
+        {{game.home ? "Home" : "Away"}}
+      </div>
+      <div class="col-md-2" *ngIf="game.home != null">
+        {{ game.team }}
+      </div>
+      <div class="col-md-2" *ngIf="game.home != null">
+        {{ game.opponent }}
+      </div>
+      <div class="col-md-2" *ngIf="game.home != null">
+        {{ game.results }}
+      </div>
+      <div class="col-md-8 eventtext" *ngIf="game.home == null">
+        {{ game.event }}
+      </div>
+      <hr class="someClass">
+    </div>
+
+  </div>
+</div>

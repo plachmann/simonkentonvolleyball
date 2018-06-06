@@ -1,42 +1,55 @@
-<div class="page-header" data-parallax="true" style="background-image: url('../assets/img/daniel-olahh.jpg');">
-  <div class="filter"></div>
-  <div class="container">
-    <div class="motto text-center">
-      <h1>Schedule Works</h1>
-      <h3>Start designing your landing page here.</h3>
-      <br />
-      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn btn-outline-neutral btn-round">
-        <i class="fa fa-play"></i>Watch video</a>
-      <button type="button" class="btn btn-outline-neutral btn-round">Download</button>
+<ng-template #customCellTemplate let-day="day" let-openDay="openDay" let-locale="locale" let-tooltipPlacement="tooltipPlacement"
+  let-highlightDay="highlightDay" let-unhighlightDay="unhighlightDay" let-eventClicked="eventClicked" let-tooltipTemplate="tooltipTemplate"
+  let-tooltipAppendToBody="tooltipAppendToBody">
+  <div class="cal-cell-top">
+    <span class="cal-day-badge bg-success" *ngIf="true">
+      {{ day.title }} 123
+    </span>
+    <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+    <div class="cal-day-notes" *ngIf="true" [ngbPopover]="day.title">
+      {{day.title }} 456
     </div>
   </div>
-</div>
-
-
-<mwl-demo-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate" (viewDateChange)="fetchEvents()" (viewChange)="fetchEvents()">
-</mwl-demo-utils-calendar-header>
-
-<ng-template #loading>
-  <div class="text-center">
-    <i class="fa fa-spin fa-spinner fa-5x"></i>
-    <br> Loading events...
+  <div class="cal-events" *ngIf="true">
+    <div class="cal-event" *ngFor="let event of day.events" [style.backgroundColor]="event.color.primary" [ngClass]="event?.cssClass"
+      (mouseenter)="highlightDay.emit({event: event})" (mouseleave)="unhighlightDay.emit({event: event})" [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event"
+      [tooltipPlacement]="tooltipPlacement" [tooltipEvent]="event" [tooltipTemplate]="tooltipTemplate" [tooltipAppendToBody]="tooltipAppendToBody">
+    </div>
   </div>
 </ng-template>
 
-<div *ngIf="events$ | async; else loading; let events">
-  <div [ngSwitch]="view">
-    <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [activeDayIsOpen]="activeDayIsOpen"
-      (dayClicked)="dayClicked($event.day)" (eventClicked)="eventClicked($event.event)">
-    </mwl-calendar-month-view>
-    <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" (eventClicked)="eventClicked($event.event)">
-    </mwl-calendar-week-view>
-    <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" (eventClicked)="eventClicked($event.event)">
-    </mwl-calendar-day-view>
+
+
+
+<div class="section section-dark text-center">
+  <div class="container">
+    <h2 class="title">2018 Lady Pioneers Schedule</h2>
+    <div class="row">
+      <div class="col-md-12">
+
+        <mwl-demo-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate">
+        </mwl-demo-utils-calendar-header>
+
+        <ng-template #loading>
+          <div class="text-center">
+            <i class="fa fa-spin fa-spinner fa-5x"></i>
+            <br> Loading events...
+          </div>
+        </ng-template>
+
+        <div *ngIf="events$ | async; else loading; let events">
+          <div [ngSwitch]="view">
+            <!-- [cellTemplate]="customCellTemplate" -->
+            <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [activeDayIsOpen]="activeDayIsOpen"
+              (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)" [cellTemplate]="customCellTemplate">
+            </mwl-calendar-month-view>
+            <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" (eventClicked)="eventClicked($event.event)">
+            </mwl-calendar-week-view>
+            <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" (eventClicked)="eventClicked($event.event)">
+            </mwl-calendar-day-view>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-<ul *ngFor="let movie of gamesObs | async" class="card">
-  <li>{{movie.team}}</li>
-  <li>{{movie.opponent}}</li>
-  <li>{{movie.gametime}}</li>
-</ul>

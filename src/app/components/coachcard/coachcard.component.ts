@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-playercard',
-  templateUrl: './playercard.component.html',
-  styleUrls: ['./playercard.component.scss']
+  selector: 'app-coachcard',
+  templateUrl: './coachcard.component.html',
+  styleUrls: ['./coachcard.component.scss']
 })
-export class PlayercardComponent {
+export class CoachcardComponent {
 
   @Input() public name: string;
   @Input() public title: string;
