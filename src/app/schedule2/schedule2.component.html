@@ -1,19 +1,34 @@
 <div class="section section-dark text-center">
   <div class="container">
     <h2 class="title">2018 Lady Pioneers Schedule</h2>
-    <div class="row" *ngFor="let book of gamesObservable | async">
-      <div class="col-md-3">
-        {{book.home ? "Home" : "Away"}}
+    <div class="row schedhead">
+      <div class="col-md-2">DATE</div>
+      <div class="col-md-2">TIME</div>
+      <div class="col-md-2">LOCATION</div>
+      <div class="col-md-2">TEAM</div>
+      <div class="col-md-2">OPPONENT</div>
+      <div class="col-md-2">RESULTS</div>
+    </div>
+    <div class="row" *ngFor="let game of gamesObservable | async">
+      <div class="col-md-2">
+        {{toDateString(game.gametime)}}
       </div>
-      <div class="col-md-3">
-        {{ book.team }}
+      <div class="col-md-2">
+        {{toTimeString(game.gametime)}}
       </div>
-      <div class="col-md-3">
-        {{ book.opponent }}
+      <div class="col-md-2">
+        {{game.home ? "Home" : "Away"}}
       </div>
-      <div class="col-md-3">
-        {{toDateString(book.gametime)}} {{toTimeString(book.gametime)}}
+      <div class="col-md-2">
+        {{ game.team }}
       </div>
+      <div class="col-md-2">
+        {{ game.opponent }}
+      </div>
+      <div class="col-md-2">
+        {{ game.results }}
+      </div>
+      <hr>
     </div>
   </div>
 </div>

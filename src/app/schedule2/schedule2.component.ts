@@ -8,6 +8,7 @@ interface Game {
   team: string;
   gametime: Date;
   home: boolean;
+  results: string
 }
 
 @Component({
@@ -23,7 +24,7 @@ export class Schedule2Component implements OnInit {
   constructor(private afs: AngularFirestore) { }
 
   ngOnInit() {
-    this.gamesCollection = this.afs.collection('games');
+    this.gamesCollection = this.afs.collection('games', ref => ref.orderBy('gametime'));
     this.gamesObservable = this.gamesCollection.valueChanges()
   }
 
