@@ -2,34 +2,36 @@
   <div class="container">
     <h2 class="title">2018 Lady Pioneers Volleyball Schedule</h2>
     <div class="row schedhead">
-      <div class="col-md-2">DATE</div>
-      <div class="col-md-2">TIME</div>
-      <div class="col-md-2">LOCATION</div>
-      <div class="col-md-2">TEAM</div>
-      <div class="col-md-2">OPPONENT</div>
-      <div class="col-md-2">RESULTS</div>
+      <div class="col-2">DATE</div>
+      <div class="col-2 d-none d-sm-block">TIME</div>
+      <div class="col-2">SITE</div>
+      <div class="col-2">TEAM</div>
+      <div class="col-2">OPPONENT</div>
+      <div class="col-2 d-none d-sm-block">RESULTS</div>
     </div>
     <br>
     <div class="row" *ngFor="let game of gamesObservable | async">
-      <div class="col-md-2">
+      <div class="col-2">
         {{toDateString(game.gametime)}}
       </div>
-      <div class="col-md-2">
+      <div class="col-2 d-none d-sm-block">
         {{toTimeString(game.gametime)}}
       </div>
-      <div class="col-md-2" *ngIf="game.home != null">
-        {{game.home ? "Home" : "Away"}}
+      <div class="col-2" *ngIf="game.home != null">
+        <i *ngIf="!game.home" class="fas fa-bus"></i>
+        <i *ngIf="game.home" class="fab fa-fort-awesome"></i>
+        <div class="d-none d-sm-block">{{game.home ? "Home" : "Away"}}</div>
       </div>
-      <div class="col-md-2" *ngIf="game.home != null">
+      <div class="col-2" *ngIf="game.home != null">
         {{ game.team }}
       </div>
-      <div class="col-md-2" *ngIf="game.home != null">
+      <div class="col-2" *ngIf="game.home != null">
         {{ game.opponent }}
       </div>
-      <div class="col-md-2" *ngIf="game.home != null">
+      <div class="col-2 d-none d-sm-block" *ngIf="game.home != null">
         {{ game.results }}
       </div>
-      <div class="col-md-8 eventtext" *ngIf="game.home == null">
+      <div class="col-8 eventtext" *ngIf="game.home == null">
         {{ game.event }}
       </div>
       <hr class="someClass">
